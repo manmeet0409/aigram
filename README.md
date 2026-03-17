@@ -1,36 +1,118 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Blog
+
+A modern Next.js blogging platform with NextAuth (GitHub) authentication and MDX support for blog posts.
+
+## Features
+
+- **NextAuth Authentication** - GitHub OAuth login
+- **MDX Support** - Write blog posts in MDX format with React components
+- **Static Generation** - Fast, SEO-friendly blog pages
+- **Responsive Design** - Clean, modern UI with Tailwind CSS
+- **Easy Content Management** - Add new posts by creating MDX files
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- GitHub OAuth App credentials
+
+### Installation
+
+```bash
+npm install
+```
+
+### Environment Variables
+
+Create a `.env.local` file:
+
+```env
+AUTH_SECRET=your-secret-key
+AUTH_GITHUB_ID=your-github-client-id
+AUTH_GITHUB_SECRET=your-github-client-secret
+```
+
+Generate a secret:
+```bash
+openssl rand -base64 32
+```
+
+### GitHub OAuth Setup
+
+1. Go to [GitHub Settings → Developer Settings → OAuth Apps](https://github.com/settings/developers)
+2. Create a new OAuth App
+3. Set Authorization callback URL to:
+   - Local: `http://localhost:3000/api/auth/callback/github`
+   - Production: `https://your-domain.vercel.app/api/auth/callback/github`
+4. Copy Client ID and Client Secret to your `.env.local`
+
+### Development
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Adding Blog Posts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Create a new `.mdx` file in `content/blog/`:
 
-## Learn More
+```mdx
+---
+title: "Your Post Title"
+date: "2026-03-18"
+excerpt: "Brief summary for previews"
+author: "Your Name"
+---
 
-To learn more about Next.js, take a look at the following resources:
+Your content here...
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deployment
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The site is configured for Vercel deployment:
 
-## Deploy on Vercel
+```bash
+vercel --prod
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Project Structure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+ai-blog/
+├── content/
+│   └── blog/           # MDX blog posts
+│       └── ai-agents-2026.mdx
+├── src/
+│   ├── app/
+│   │   ├── api/auth/   # NextAuth routes
+│   │   ├── blog/      # Blog pages
+│   │   └── page.tsx   # Root redirect
+│   ├── auth.ts        # NextAuth config
+│   └── lib/           # Utilities
+├── skills/
+│   ├── generate-content/  # Skill guide
+│   └── post-blog/         # Skill guide
+└── public/             # Static assets
+```
+
+## Skills
+
+This project includes skill guides for content creation:
+
+- **[Generate Content](skills/generate-content/README.md)** - Create blog posts from topics or videos
+- **[Post Blog](skills/post-blog/README.md)** - Add new MDX posts and commit to the repo
+
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **Auth**: NextAuth.js v5 (beta)
+- **Styling**: Tailwind CSS
+- **Content**: MDX with gray-matter
+- **Deployment**: Vercel
+
+## License
+
+MIT
