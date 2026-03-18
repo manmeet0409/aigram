@@ -31,16 +31,11 @@ export function ThemeToggle() {
       className="relative inline-flex h-9 w-9 items-center justify-center rounded-md border border-border bg-background text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
     >
-      <Sun
-        className={`h-4 w-4 transition-all duration-300 ${
-          isDark ? "rotate-0 scale-100" : "rotate-90 scale-0"
-        } absolute`}
-      />
-      <Moon
-        className={`h-4 w-4 transition-all duration-300 ${
-          isDark ? "rotate-0 scale-100" : "-rotate-90 scale-0"
-        } absolute`}
-      />
+      {isDark ? (
+        <Moon className="h-4 w-4" />
+      ) : (
+        <Sun className="h-4 w-4" />
+      )}
       <span className="sr-only">Toggle theme</span>
     </button>
   );

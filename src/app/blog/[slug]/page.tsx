@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { Header } from "../../../components/header";
 import { ArrowLeft, Calendar, User } from "lucide-react";
+import remarkGfm from "remark-gfm";
 
 export async function generateStaticParams() {
   const posts = getAllPosts();
@@ -75,7 +76,14 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
           {/* Article Content */}
           <div className="prose prose-lg dark:prose-invert max-w-none">
-            <MDXRemote source={post.content} />
+            <MDXRemote 
+              source={post.content} 
+              options={{
+                mdxOptions: {
+                  remarkPlugins: [remarkGfm],
+                },
+              }}
+            />
           </div>
         </article>
 
