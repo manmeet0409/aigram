@@ -28,10 +28,9 @@ export function Header({ session }: HeaderProps) {
         <Link
           href="/blog"
           className="flex items-center space-x-2 font-bold text-xl transition-colors hover:text-primary"
-          aria-label="AI Blog - Home"
+          aria-label="Aigram - Home"
         >
-          <span className="text-primary">AI</span>
-          <span>Blog</span>
+          <span className="text-primary">Aigram</span>
         </Link>
 
         <nav className="flex items-center gap-6" aria-label="Main navigation">

@@ -18,7 +18,7 @@ export default async function BlogPage() {
         <section className="mb-16 text-center">
           <div className="mb-4 inline-flex items-center justify-center rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
             <BookOpen className="mr-2 h-4 w-4" />
-            Welcome to AI Blog
+            Welcome to Aigram
           </div>
           <h1 className="mb-4 text-4xl font-extrabold tracking-tight sm:text-5xl">
             Insights on{" "}
@@ -98,7 +98,7 @@ export default async function BlogPage() {
         <div className="container mx-auto max-w-5xl px-4 py-8">
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
             <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} AI Blog. All rights reserved.
+              © {new Date().getFullYear()} Aigram. All rights reserved.
             </p>
             <div className="flex items-center gap-4">
               <ThemeToggle />
