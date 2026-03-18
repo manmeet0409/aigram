@@ -1,4 +1,4 @@
-# AI Blog
+# Aigram
 
 A modern Next.js blogging platform with NextAuth (GitHub) authentication and MDX support for blog posts.
 

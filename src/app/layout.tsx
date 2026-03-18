@@ -15,16 +15,16 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "AI Blog - Insights on AI & Technology",
-    template: "%s | AI Blog",
+    default: "Aigram - Insights on AI & Technology",
+    template: "%s | Aigram",
   },
   description: "Thoughtful articles on artificial intelligence, machine learning, and the latest in technology.",
-  keywords: ["AI", "Machine Learning", "Technology", "Blog", "Artificial Intelligence"],
-  authors: [{ name: "AI Blog" }],
+  keywords: ["AI", "Machine Learning", "Technology", "Blog", "Artificial Intelligence", "Aigram"],
+  authors: [{ name: "Aigram" }],
   openGraph: {
     type: "website",
     locale: "en_US",
-    siteName: "AI Blog",
+    siteName: "Aigram",
   },
 };
 
