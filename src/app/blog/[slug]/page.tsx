@@ -1,70 +1,104 @@
-import { getPostBySlug, getAllPosts } from '@/lib/posts'
-import { auth } from '@/auth'
-import Link from 'next/link'
-import { notFound } from 'next/navigation'
-import { MDXRemote } from 'next-mdx-remote/rsc'
-import React from 'react'
+import { getPostBySlug, getAllPosts } from "@/lib/posts";
+import { auth } from "@/auth";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { MDXRemote } from "next-mdx-remote/rsc";
+import { Header } from "../../../components/header";
+import { ArrowLeft, Calendar, User } from "lucide-react";
 
 export async function generateStaticParams() {
-  const posts = getAllPosts()
+  const posts = getAllPosts();
   return posts.map((post) => ({
     slug: post.slug,
-  }))
+  }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const post = getPostBySlug(slug);
+  
+  if (!post) {
+    return {
+      title: "Post Not Found",
+    };
+  }
+
+  return {
+    title: post.title,
+    description: post.excerpt,
+  };
 }
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
-  const post = getPostBySlug(slug)
-  const session = await auth()
+  const { slug } = await params;
+  const post = getPostBySlug(slug);
+  const session = await auth();
 
   if (!post) {
-    notFound()
+    notFound();
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm">
-        <div className="max-w-4xl mx-auto px-4 py-6 flex justify-between items-center">
-          <Link href="/blog" className="text-2xl font-bold text-gray-900 hover:text-blue-600">
-            AI Blog
-          </Link>
-          <div className="flex items-center gap-4">
-            {session ? (
-              <>
-                <span className="text-sm text-gray-600">{session.user?.name}</span>
-                <Link href="/api/auth/signout" className="text-sm text-red-600 hover:text-red-800">
-                  Sign out
-                </Link>
-              </>
-            ) : (
-              <Link href="/api/auth/signin" className="text-sm text-gray-600 hover:text-gray-900">
-                Sign in
-              </Link>
-            )}
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-background">
+      <Header session={session} />
 
-      <main className="max-w-3xl mx-auto px-4 py-12">
-        <article className="bg-white rounded-lg shadow-sm p-8">
-          <header className="mb-8">
-            <h1 className="text-4xl font-bold text-gray-900">{post.title}</h1>
-            <div className="mt-4 text-gray-500">
-              {post.date} · {post.author}
+      <main className="container mx-auto max-w-3xl px-4 py-12">
+        {/* Back Link */}
+        <Link
+          href="/blog"
+          className="group mb-8 inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+        >
+          <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+          Back to all posts
+        </Link>
+
+        {/* Article */}
+        <article className="rounded-2xl border border-border bg-card p-8 shadow-sm">
+          {/* Article Header */}
+          <header className="mb-8 pb-8 border-b border-border">
+            <h1 className="mb-4 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
+              {post.title}
+            </h1>
+            
+            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+              <div className="flex items-center gap-1.5">
+                <Calendar className="h-4 w-4" />
+                <time dateTime={post.date}>{post.date}</time>
+              </div>
+              <span aria-hidden="true">·</span>
+              <div className="flex items-center gap-1.5">
+                <User className="h-4 w-4" />
+                <span>{post.author}</span>
+              </div>
             </div>
           </header>
 
-          <div className="prose prose-lg max-w-none">
+          {/* Article Content */}
+          <div className="prose prose-lg dark:prose-invert max-w-none">
             <MDXRemote source={post.content} />
           </div>
         </article>
 
-        <div className="mt-8">
-          <Link href="/blog" className="text-blue-600 hover:text-blue-800">
-            ← Back to all posts
+        {/* Footer Navigation */}
+        <nav className="mt-8 flex justify-center">
+          <Link
+            href="/blog"
+            className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-6 py-3 font-medium text-muted-foreground shadow-sm transition-all hover:border-primary hover:text-primary"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            All Posts
           </Link>
-        </div>
+        </nav>
       </main>
+
+      {/* Footer */}
+      <footer className="border-t border-border bg-card/50">
+        <div className="container mx-auto max-w-5xl px-4 py-8">
+          <p className="text-center text-sm text-muted-foreground">
+            © {new Date().getFullYear()} AI Blog. All rights reserved.
+          </p>
+        </div>
+      </footer>
     </div>
-  )
+  );
 }

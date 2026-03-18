@@ -1,73 +1,111 @@
-import Link from 'next/link'
-import { getAllPosts } from '@/lib/posts'
-import { auth } from '@/auth'
+import Link from "next/link";
+import { getAllPosts } from "@/lib/posts";
+import { auth } from "@/auth";
+import { Header } from "../../components/header";
+import { ThemeToggle } from "../../components/themetoggle";
+import { BookOpen } from "lucide-react";
 
 export default async function BlogPage() {
-  const session = await auth()
-  const posts = getAllPosts()
+  const session = await auth();
+  const posts = getAllPosts();
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm">
-        <div className="max-w-4xl mx-auto px-4 py-6 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-gray-900">AI Blog</h1>
-          <div className="flex items-center gap-4">
-            {session ? (
-              <>
-                <span className="text-sm text-gray-600">
-                  {session.user?.name}
-                </span>
-                <Link
-                  href="/api/auth/signout"
-                  className="text-sm text-red-600 hover:text-red-800"
+    <div className="min-h-screen bg-background">
+      <Header session={session} />
+      
+      <main className="container mx-auto max-w-5xl px-4 py-12">
+        {/* Hero Section */}
+        <section className="mb-16 text-center">
+          <div className="mb-4 inline-flex items-center justify-center rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
+            <BookOpen className="mr-2 h-4 w-4" />
+            Welcome to AI Blog
+          </div>
+          <h1 className="mb-4 text-4xl font-extrabold tracking-tight sm:text-5xl">
+            Insights on{" "}
+            <span className="text-primary">Artificial Intelligence</span>
+          </h1>
+          <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
+            Exploring the frontiers of AI, machine learning, and technology.
+            Deep dives, tutorials, and thoughtful analysis.
+          </p>
+        </section>
+
+        {/* Posts Grid */}
+        <section aria-labelledby="posts-heading">
+          <h2 id="posts-heading" className="sr-only">
+            Latest Posts
+          </h2>
+          
+          {posts.length === 0 ? (
+            <div className="rounded-lg border border-dashed border-border p-12 text-center">
+              <p className="text-muted-foreground">
+                No posts yet. Check back soon!
+              </p>
+            </div>
+          ) : (
+            <div className="grid gap-6 sm:grid-cols-2">
+              {posts.map((post, index) => (
+                <article
+                  key={post.slug}
+                  className="group relative flex flex-col rounded-xl border border-border bg-card p-6 transition-all hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5"
+                  style={{
+                    animationDelay: `${index * 50}ms`,
+                  }}
                 >
-                  Sign out
-                </Link>
-              </>
-            ) : (
-              <Link
-                href="/api/auth/signin"
-                className="text-sm text-gray-600 hover:text-gray-900"
-              >
-                Sign in
-              </Link>
-            )}
+                  <div className="mb-4 flex items-center gap-2 text-sm text-muted-foreground">
+                    <time dateTime={post.date}>{post.date}</time>
+                    <span aria-hidden="true">·</span>
+                    <span>{post.author}</span>
+                  </div>
+                  
+                  <h3 className="mb-3 text-xl font-bold leading-snug group-hover:text-primary transition-colors">
+                    <Link href={`/blog/${post.slug}`} className="focus:outline-none">
+                      <span className="absolute inset-0" aria-hidden="true" />
+                      {post.title}
+                    </Link>
+                  </h3>
+                  
+                  <p className="mb-4 flex-1 text-muted-foreground line-clamp-3">
+                    {post.excerpt}
+                  </p>
+                  
+                  <div className="flex items-center text-sm font-medium text-primary">
+                    Read article
+                    <svg
+                      className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17 8l4 4m0 0l-4 4m4-4H3"
+                      />
+                    </svg>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+        </section>
+      </main>
+
+      {/* Footer */}
+      <footer className="border-t border-border bg-card/50">
+        <div className="container mx-auto max-w-5xl px-4 py-8">
+          <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
+            <p className="text-sm text-muted-foreground">
+              © {new Date().getFullYear()} AI Blog. All rights reserved.
+            </p>
+            <div className="flex items-center gap-4">
+              <ThemeToggle />
+            </div>
           </div>
         </div>
-      </header>
-
-      <main className="max-w-4xl mx-auto px-4 py-12">
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900">Latest Posts</h2>
-          <p className="mt-2 text-gray-600">Thoughts on AI, machine learning, and technology</p>
-        </div>
-
-        <div className="space-y-8">
-          {posts.map((post) => (
-            <article key={post.slug} className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
-              <Link href={`/blog/${post.slug}`}>
-                <h3 className="text-xl font-semibold text-gray-900 hover:text-blue-600">
-                  {post.title}
-                </h3>
-              </Link>
-              <div className="mt-2 text-sm text-gray-500">
-                {post.date} · {post.author}
-              </div>
-              <p className="mt-3 text-gray-600">{post.excerpt}</p>
-              <Link
-                href={`/blog/${post.slug}`}
-                className="mt-4 inline-block text-blue-600 hover:text-blue-800"
-              >
-                Read more →
-              </Link>
-            </article>
-          ))}
-        </div>
-
-        {posts.length === 0 && (
-          <p className="text-gray-600">No posts yet. Check back soon!</p>
-        )}
-      </main>
+      </footer>
     </div>
-  )
+  );
 }
