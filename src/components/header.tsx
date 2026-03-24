@@ -25,7 +25,11 @@ export function Header({ session }: HeaderProps) {
   );
 
   const handleSignOut = useCallback(async () => {
-    await signOut({ redirect: false });
+    try {
+      await signOut({ redirect: false, callbackUrl: "/" });
+    } catch (error) {
+      console.error('Sign out error:', error);
+    }
     router.push("/");
   }, [router]);
 
